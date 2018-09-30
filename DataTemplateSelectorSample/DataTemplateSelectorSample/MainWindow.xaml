@@ -1,0 +1,47 @@
+﻿<Window
+    x:Class="DataTemplateSelectorSample.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DataTemplateSelectorSample"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <!--  Ageが20未満のときのテンプレート  -->
+            <DataTemplate x:Key="under20Template">
+                <TextBlock>
+                    <Run Text="{Binding Name}" />
+                    (<Run Text="{Binding Age}" />
+                    )</TextBlock>
+            </DataTemplate>
+            <!--  Ageが20以上のときのテンプレート  -->
+            <DataTemplate x:Key="over20Template">
+                <TextBlock Background="Yellow">
+                    <Run Text="{Binding Name}" />
+                    (<Run Text="{Binding Age}" />
+                    )</TextBlock>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <ListView>
+            <!--  ListViewのデータ  -->
+            <ListView.ItemsSource>
+                <x:Array Type="{x:Type local:Person}">
+                    <local:Person Name="Alice" Age="18" />
+                    <local:Person Name="Bob" Age="19" />
+                    <local:Person Name="Carol" Age="20" />
+                    <local:Person Name="Dave" Age="21" />
+                </x:Array>
+            </ListView.ItemsSource>
+            <!--  使用するDataTemplateを選択するデータテンプレートセレクターの設定  -->
+            <ListView.ItemTemplateSelector>
+                <local:PersonTemplateSelector Over20Template="{StaticResource over20Template}" Under20Template="{StaticResource under20Template}" />
+            </ListView.ItemTemplateSelector>
+        </ListView>
+    </Grid>
+</Window>
