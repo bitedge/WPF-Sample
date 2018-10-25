@@ -9,9 +9,16 @@ namespace FormattedTextSample
     /// </summary>
     public partial class MainWindow : Window
     {
+        public FontFamily SelectedFontFamily
+        {
+            get => new FontFamily(myView.FontName);
+            set => myView.FontName = value.Source;
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         private void CheckBoxWidth_Checked(object sender, RoutedEventArgs e) => myView.DrawWidth = true;
@@ -38,6 +45,7 @@ namespace FormattedTextSample
 
     public class MyView : UserControl
     {
+        public string FontName { get => fontName; set { fontName = value; InvalidateVisual(); } }
         public bool DrawWidth { set { drawWidth = value; InvalidateVisual(); } }
         public bool DrawHeight { set { drawHeight = value; InvalidateVisual(); } }
         public bool DrawBaseline { set { drawBaseline = value; InvalidateVisual(); } }
@@ -46,6 +54,7 @@ namespace FormattedTextSample
         public bool DrawOverhangTrailing { set { drawOverhangTrailing = value; InvalidateVisual(); } }
         public bool DrawExtent { set { drawExtent = value; InvalidateVisual(); } }
 
+        private string fontName = "Verdana";
         private bool drawWidth = false;
         private bool drawHeight = false;
         private bool drawBaseline = false;
@@ -69,7 +78,7 @@ namespace FormattedTextSample
                 text,
                 System.Globalization.CultureInfo.GetCultureInfo("en-us"),
                 FlowDirection.LeftToRight,
-                new Typeface("Verdana"),
+                new Typeface(fontName),
                 196,
                 Brushes.Black);
 
@@ -80,8 +89,10 @@ namespace FormattedTextSample
             var extent = formattedText.Extent;
 
             Pen pen1 = new Pen(Brushes.Red, 1);
-            Pen pen2 = new Pen(Brushes.LightSlateGray, 1);
-            pen2.DashStyle = DashStyles.DashDot;
+            Pen pen2 = new Pen(Brushes.LightSlateGray, 1)
+            {
+                DashStyle = DashStyles.DashDot
+            };
 
             if (drawWidth)
             {
